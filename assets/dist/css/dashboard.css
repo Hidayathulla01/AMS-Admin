@@ -1,0 +1,273 @@
+    .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+	  
+    /* Dashboard Content */
+	.heading{
+	  color:#065392;
+	}
+    .dashboard-content {
+      padding: 20px;
+      background-color: #f9f9fc;
+    }
+
+    .overview-card {
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      padding: 12px;
+      color: #fff;
+    }
+
+    .overview-card.pink {
+      background-color: #ff0078;
+    }
+
+    .overview-card.purple {
+      background-color: #065392;
+    }
+
+    .overview-card.blue {
+      background-color: #007bff;
+    }
+
+    .overview-card.info {
+      background-color: #17a2b8;
+    }
+	/* Statistics Section */
+    .stats-card {
+      background-color: #fff;
+      border-radius: 10px;
+      text-align: center;
+      padding: 7px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .stats-card p {
+      margin: 0;
+      font-size: 14px;
+      color: #666;
+    }
+
+    .stats-card .value {
+      font-size: 20px;
+      font-weight: bold;
+    }
+
+    .alert-reminder {
+      background-color: #065392;
+      color: #fff;
+      border: 1px solid #065392;
+      border-radius: 5px;
+      padding: 10px;
+      margin-bottom: 20px;
+    }
+	.overflow{
+	background: #fff;
+  color: black;
+  padding: 15px;
+  width: 18%;
+  height: 100vh;
+  overflow: scroll;
+  border: 1px solid #ccc;
+}
+
+
+
+
+body {
+  font-size: .875rem;
+  font-family: 'Poppins', sans-serif;
+}
+
+.feather {
+  width: 16px;
+  height: 16px;
+  vertical-align: text-bottom;
+}
+
+.bg-dark1{
+	background-color: #065392;
+    color: #fff;
+}
+
+/*
+ * Sidebar
+ */
+
+.sidebar {
+  position: fixed;
+  top: 0;
+  /* rtl:raw:
+  right: 0;
+  */
+  bottom: 0;
+  /* rtl:remove */
+  left: 0;
+  z-index: 100; /* Behind the navbar */
+  padding: 48px 0 0; /* Height of navbar */
+  box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
+}
+
+/* @media (max-width: 767.98px) {
+  .sidebar {
+    top: 5rem;
+  }
+} */
+
+.sidebar-sticky {
+  position: relative;
+  top: 0;
+  height: calc(100vh - 48px);
+  padding-top: .5rem;
+  overflow-x: hidden;
+  overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
+  
+}
+/* sidebar scroll */
+.position-sticky::-webkit-scrollbar{
+      width:5px;
+      background-color:#fff;
+      }
+      
+  .position-sticky::-webkit-scrollbar-thumb{
+    background:#065392 !important;
+    border-radius:5px;
+  }
+
+.sidebar .nav-link {
+  font-weight: 500;
+  color: #333;
+}
+
+.sidebar .nav-link .feather {
+  margin-right: 4px;
+  color: #727272;
+}
+
+.sidebar .nav-link.active {
+  color: #fff;
+  background-color: #065392;
+  border-radius: 5px;
+  width:173px;
+}
+/* .sidebar .nav-link:hover {
+  color: #fff;
+  background-color: #dcdfe2;
+  border-radius: 5px;
+} */
+
+.sidebar .nav-link:hover .feather,
+.sidebar .nav-link.active .feather {
+  color: inherit;
+}
+
+.sidebar-heading {
+  font-size: .75rem;
+  text-transform: uppercase;
+}
+
+/*
+ * Navbar
+ */
+
+.navbar-brand {
+  padding-top: .75rem;
+  padding-bottom: .75rem;
+  font-size: 1rem;
+  color:#ff0078 !important;
+  /* background-color: rgba(0, 0, 0, .25);
+  box-shadow: inset -1px 0 0 rgba(0, 0, 0, .25); */
+}
+
+.navbar .navbar-toggler {
+  /* top: .25rem; */
+  right: 1rem;
+}
+.toggle{
+	color:#ff0078 !important;
+}
+
+.navbar .form-control {
+  padding: .75rem 1rem;
+  border-width: 0;
+  border-radius: 0;
+}
+
+.form-control-dark {
+  color: #fff;
+  background-color: rgba(255, 255, 255, .1);
+  border-color: rgba(255, 255, 255, .1);
+}
+
+.form-control-dark:focus {
+  border-color: transparent;
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, .25);
+}
+
+@media (max-width: 768px) {
+  .overview-card, .stats-card {
+    flex-direction: column; /* Stack icon and text */
+    align-items: center;
+    text-align: center;
+  }
+
+  .overview-card .value, .stats-card .value {
+    font-size: 1.2rem; /* Adjust font size */
+  }
+}
+
+.profile-img {
+  width: 40px;  /* Set your desired size */
+  height: 40px; /* Ensures the image is square */
+  object-fit: cover; /* Makes sure the image scales correctly */
+  border-radius: 5px; /* Slightly rounded corners (optional) */
+  margin-right:30px;
+}
+.btn-custom {
+      background-color: #065392; /* Bright Pink Save Button */
+      color: #ffffff;
+      border: none;
+      transition: background-color 0.3s ease;
+    }
+	.btn-Send {
+      background-color: #7559ff !important; /* Bright Pink Save Button */
+      color: #ffffff;
+      border: none;
+      transition: background-color 0.3s ease;
+    }
+.btn-Send:hover {
+      background-color: #7559ff /* Darker Pink on Hover */
+    }
+    .btn-custom:hover {
+      background-color: #065392; /* Darker Pink on Hover */
+    }
+	.form-control:focus {
+            box-shadow: none;
+            border-color: #065392;
+			box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+        }
+		.form-select:focus {
+			border-color:#f06292;
+		}
+		
+		.breadcrumb-item a {
+            text-decoration: none;
+            color: #5e5e5e;
+        }
+	.required-label .form-label::after {
+  content: " *";
+  color: #f06292;
+  font-weight: bold;
+}

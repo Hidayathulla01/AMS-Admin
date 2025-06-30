@@ -1,0 +1,4 @@
+‘Default Web Site’ has local handler mappings that overwrite the mappings defined on
+the server level. Changes to the PHP setup on the server level may not take effect on
+this site.
+
