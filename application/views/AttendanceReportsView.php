@@ -35,26 +35,40 @@
         <div class="form-container bg-white rounded shadow p-4 mb-4">
             <h4 class="fs-5 mb-3">Filter Attendance Reports</h4>
 
-           <form method="post" action="<?= base_url('AttendanceResult') ?>">
+<form method="post" action="<?= base_url('AttendanceResult') ?>">
 
     <div class="row mb-3">
         <label class="col-sm-2 col-form-label">Masjid</label>
         <div class="col-sm-10">
-          <select class="form-select" name="masjid_id" id="masjidDropdown" required>
-    <option value="">Select Masjid</option>
-    <?php foreach ($masjids as $masjid): ?>
-       <option value="<?= $masjid->masjid_id ?>"><?= $masjid->masjid_name ?></option>
-    <?php endforeach; ?>
-</select>
+            <select class="form-select" name="masjid_id" id="masjidDropdown" required>
+                <option value="">Select Masjid</option>
+                <?php foreach ($masjids as $masjid): ?>
+                    <option value="<?= $masjid->masjid_id ?>"><?= $masjid->masjid_name ?></option>
+                <?php endforeach; ?>
+            </select>
         </div>
     </div>
 
     <div class="row mb-3">
         <label class="col-sm-2 col-form-label">Course</label>
         <div class="col-sm-10">
-           <select class="form-select" name="course_id" id="courseDropdown" required>
-    <option value="">Select Course</option>
-</select>
+            <select class="form-select" name="course_id" id="courseDropdown" required>
+                <option value="">Select Course</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <label class="col-sm-2 col-form-label">Attendance Status</label>
+        <div class="col-sm-10">
+            <select class="form-select" name="attendance_filter">
+                <option value="all">All</option>
+                <option value="present">Present</option>
+                <option value="absent">Absent</option>
+                <option value="late">Late</option>
+                <option value="leave">Leave</option>
+                <option value="holiday">Holiday</option>
+            </select>
         </div>
     </div>
 
@@ -79,14 +93,17 @@
     <div class="row mb-3" id="dateInputs">
         <label class="col-sm-2 col-form-label"></label>
         <div class="col-sm-10">
-            <!-- Default is single date -->
             <input type="text" name="date_single" class="form-control" id="singleDate">
         </div>
     </div>
 
-    <div class="text-end">
-        <button type="submit" class="btn btn-primary">Search</button>
-    </div>
+<div class="d-flex justify-content-between">
+    <button type="button" class="btn btn-secondary" onclick="location.reload();">
+        <i class="fas fa-sync-alt"></i> Reset
+    </button>
+    <button type="submit" class="btn btn-primary">Search</button>
+</div>
+
 </form>
         </div>
 
