@@ -9,6 +9,7 @@
     <link href="./assets/dist/css/bootstrap5.css" rel="stylesheet">
     <link href="./assets/dist/css/dashboard.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <style>
         .attendance-table th, .attendance-table td {
@@ -34,6 +35,21 @@
         .icon-leave { color: blue; }
         .legend i { margin-right: 5px; }
         .text-danger { color: #198754 !important; }
+        a.show-attendance-pie {
+    cursor: pointer;
+    text-decoration: underline;
+}
+#attendancePieChart {
+    width: 100% !important;
+    max-width: 380px;
+    height: auto !important;
+    margin: 0 auto;
+}
+
+#attendancePieModal .modal-dialog {
+    max-width: 500px;
+}
+
     </style>
 </head>
 <body>
@@ -109,46 +125,92 @@
         <tbody>
             <?php foreach ($report['students'] as $student): ?>
                 <tr>
-                    <td class="name-col">
-                        <i class="fa-solid fa-user"></i>
-                        <?= htmlspecialchars($student['name']) ?><br>
-                        <small class="text-muted">Student</small>
-                    </td>
+                   <?php
+// Prepare attendance counts for the pie chart
+$present = $absent = $late = $leave = $holiday = 0;
+foreach ($report['filtered_dates'] as $date) {
+    $status = strtolower($student['attendance'][$date] ?? '-');
+    if ($status == 'present') $present++;
+    elseif ($status == 'absent') $absent++;
+    elseif ($status == 'late') $late++;
+    elseif ($status == 'leave') $leave++;
+    elseif ($status == 'holiday') $holiday++;
+}
+$attendanceData = [
+    'present' => $present,
+    'absent' => $absent,
+    'late' => $late,
+    'leave' => $leave,
+    'holiday' => $holiday
+];
+?>
+<td class="name-col">
+    <i class="fa-solid fa-user"></i>
+    <a href="#" class="show-attendance-pie"
+       data-name="<?= htmlspecialchars($student['name']) ?>"
+       data-attendance='<?= json_encode($attendanceData) ?>'>
+       <?= htmlspecialchars($student['name']) ?>
+    </a>
+    <br>
+    <small class="text-muted">Student</small>
+</td>
+
                     <?php
-                    $total = 0;
-                    $count = 0;
-                    foreach ($report['filtered_dates'] as $date):
-                        $count++;
-                        $status = $student['attendance'][$date] ?? '-';
-                        $remarkData = $remarks[$student['student_id']][$date] ?? [];
-                        $remark = $remarkData['remark'] ?? '';
+                  $total = 0;
+$count = 0;
+$filter = strtolower(trim($this->input->post('attendance_filter')));
+if ($filter === '' || $filter === 'all') {
+    $filter = 'present';
+}
 
-                        echo "<td data-col='{$count}'><span class='attendance-icon' data-name='" . htmlspecialchars($student['name']) . "' data-status='" . strtolower($status) . "' data-date='" . $date . "' data-remark='" . htmlspecialchars($remark) . "' style='cursor:pointer;'>";
+foreach ($report['filtered_dates'] as $date):
+    $count++;
+    $status = $student['attendance'][$date] ?? '-';
+    $remarkData = $remarks[$student['student_id']][$date] ?? [];
+    $remark = $remarkData['remark'] ?? '';
 
-                        switch ($status) {
-                            case 'present':
-                                echo '<i class="fa-solid fa-check-circle icon-present" title="Present"></i>';
-                                $total++;
-                                break;
-                            case 'absent':
-                                echo '<i class="fa-solid fa-xmark-circle icon-absent" title="Absent"></i>';
-                                break;
-                            case 'late':
-                                echo '<i class="fa-solid fa-clock icon-late" title="Late"></i>';
-                                break;
-                            case 'leave':
-                                echo '<i class="fa-solid fa-plane-departure icon-leave" title="Leave"></i>';
-                                break;
-                            case 'holiday':
-                                echo '<i class="fa-solid fa-star text-warning" title="Holiday"></i>';
-                                break;
-                            default:
-                                echo '-';
-                        }
+  // Get profile picture, use default if missing
+$profilePic = !empty($student['profile_picture']) ? $student['profile_picture'] : './assets/images/StudentImages/default.png';
 
-                        echo "</span></td>";
-                    endforeach;
-                    echo "<td><span class='text-danger fw-bold'>$total/$count</span></td>";
+echo "<td data-col='{$count}'>
+<span class='attendance-icon'
+    data-name='" . htmlspecialchars($student['name']) . "'
+    data-status='" . strtolower($status) . "'
+    data-date='" . $date . "'
+    data-remark='" . htmlspecialchars($remark) . "'
+    data-image='" . htmlspecialchars($profilePic) . "'
+    style='cursor:pointer;'>";
+
+    switch ($status) {
+        case 'present':
+            echo '<i class="fa-solid fa-check-circle icon-present" title="Present"></i>';
+            if ($filter == 'present' || $filter == 'all') $total++;
+            break;
+        case 'absent':
+            echo '<i class="fa-solid fa-xmark-circle icon-absent" title="Absent"></i>';
+            if ($filter == 'absent' || $filter == 'all') $total++;
+            break;
+        case 'late':
+            echo '<i class="fa-solid fa-clock icon-late" title="Late"></i>';
+            if ($filter == 'late' || $filter == 'all') $total++;
+            break;
+        case 'leave':
+            echo '<i class="fa-solid fa-plane-departure icon-leave" title="Leave"></i>';
+            if ($filter == 'leave' || $filter == 'all') $total++;
+            break;
+        case 'holiday':
+            echo '<i class="fa-solid fa-star text-warning" title="Holiday"></i>';
+            if ($filter == 'holiday' || $filter == 'all') $total++;
+            break;
+        default:
+            echo '-';
+    }
+
+    echo "</span></td>";
+endforeach;
+
+echo "<td><span class='text-danger fw-bold'>$total/$count</span></td>";
+
                     ?>
                 </tr>
             <?php endforeach; ?>
@@ -174,13 +236,20 @@
                 <h5 class="modal-title">Attendance Info</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
-                <p><strong>Student Name:</strong> <span id="modalStudentName"></span></p>
-                <p><strong>Attendance Status:</strong> <span id="modalAttendanceStatus"></span></p>
-                <p><strong>Date:</strong> <span id="modalDate"></span></p>
-                <p><strong>Remark:</strong></p>
-                <textarea id="modalRemark" class="form-control" rows="3" readonly></textarea>
-            </div>
+           <div class="modal-body">
+    <div class="d-flex align-items-start mb-3">
+        <img id="modalProfilePic" src="" alt="Profile Picture"
+             style="width: 80px; height: 80px; object-fit: cover; border-radius: 50%; border: 2px solid #ccc; margin-right: 15px;">
+        <div>
+            <p><strong>Student Name:</strong> <span id="modalStudentName"></span></p>
+            <p><strong>Attendance Status:</strong> <span id="modalAttendanceStatus"></span></p>
+            <p><strong>Date:</strong> <span id="modalDate"></span></p>
+        </div>
+    </div>
+    <p><strong>Remark:</strong></p>
+    <textarea id="modalRemark" class="form-control" rows="3" readonly></textarea>
+</div>
+
         </div>
     </div>
 </div>
@@ -189,11 +258,62 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
 $(document).ready(function () {
+    let attendancePieChart; // Chart.js instance
+
+$(document).on('click', '.show-attendance-pie', function(e) {
+    e.preventDefault();
+    const name = $(this).data('name');
+    const attendance = JSON.parse($(this).attr('data-attendance'));
+
+
+    $('#pieStudentName').text(name);
+
+    // Prepare data for Chart.js
+    const data = {
+        labels: ['Present', 'Absent', 'Late', 'Leave', 'Holiday'],
+        datasets: [{
+            data: [
+                attendance.present,
+                attendance.absent,
+                attendance.late,
+                attendance.leave,
+                attendance.holiday
+            ],
+            backgroundColor: [
+                'green',
+                'red',
+                'orange',
+                'blue',
+                'gold'
+            ]
+        }]
+    };
+
+    // Destroy previous chart if exists
+    if (attendancePieChart) attendancePieChart.destroy();
+
+    // Draw new chart
+    const ctx = document.getElementById('attendancePieChart').getContext('2d');
+    attendancePieChart = new Chart(ctx, {
+        type: 'pie',
+        data: data,
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { position: 'bottom' }
+            }
+        }
+    });
+
+    // Show modal
+    $('#attendancePieModal').modal('show');
+});
     $('.attendance-icon').click(function () {
         $('#modalStudentName').text($(this).data('name'));
         $('#modalAttendanceStatus').text($(this).data('status'));
         $('#modalDate').text($(this).data('date'));
         $('#modalRemark').val($(this).data('remark'));
+        $('#modalProfilePic').attr('src', $(this).data('image')); // set image
         $('#attendanceModal').modal('show');
     });
 
@@ -248,6 +368,20 @@ $(document).ready(function () {
     paginateColumns(1);
 });
 </script>
+<!-- Pie Chart Modal -->
+<div class="modal fade" id="attendancePieModal" tabindex="-1" aria-labelledby="attendancePieModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title"><span id="pieStudentName"></span> - Attendance Chart</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+<canvas id="attendancePieChart"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
 
 </body>
 </html>

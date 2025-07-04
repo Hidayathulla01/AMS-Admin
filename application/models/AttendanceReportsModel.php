@@ -8,18 +8,18 @@ class AttendanceReportsModel extends CI_Model {
     }
 
     public function get_all_masjids() {
-        return $this->db->where('delete_status', '1')->get('ams.tbl_masjids')->result();
+        return $this->db->where('delete_status', '1')->get('tbl_masjids')->result();
     }
 
     public function get_all_courses() {
-        return $this->db->where('delete_status', '1')->get('ams.tbl_courses')->result();
+        return $this->db->where('delete_status', '1')->get('tbl_courses')->result();
     }
 
     public function get_courses_by_masjid($masjid_id) {
         return $this->db
             ->where('masjid_name', $masjid_id)
             ->where('delete_status', '1')
-            ->get('ams.tbl_courses')
+            ->get('tbl_courses')
             ->result();
     }
 
@@ -30,7 +30,7 @@ class AttendanceReportsModel extends CI_Model {
                             ->where("DATE(created_date) >=", $from)
                             ->where("DATE(created_date) <=", $to)
                             ->where("delete_status", '1')
-                            ->get('ams.tbl_attendance')
+                            ->get('tbl_attendance')
                             ->result();
 
         foreach ($attRows as $row) {
@@ -50,18 +50,18 @@ class AttendanceReportsModel extends CI_Model {
             'masjid_id' => $masjid_id,
             'courses_id' => $course_id,
             'delete_status' => '1'
-        ])->get('ams.tbl_assignclasses')->row();
+        ])->get('tbl_assignclasses')->row();
 
         if (!$teacherRow) return [];
 
         $teacher_id = $teacherRow->teacher_id;
-        $teacher = $this->db->where('teacher_id', $teacher_id)->get('ams.tbl_teacher')->row();
+        $teacher = $this->db->where('teacher_id', $teacher_id)->get('tbl_teacher')->row();
         $teacher_name = $teacher ? $teacher->fullname : 'Unknown';
 
         $students = $this->db->where([
             'course_id' => $course_id,
             'delete_status' => '1'
-        ])->get('ams.tbl_student')->result();
+        ])->get('tbl_student')->result();
 
         $attRows = $this->db->where([
             'masjid_id' => $masjid_id,
@@ -71,7 +71,7 @@ class AttendanceReportsModel extends CI_Model {
         ])
         ->where("DATE(created_date) >=", $from)
         ->where("DATE(created_date) <=", $to)
-        ->get('ams.tbl_attendance')
+        ->get('tbl_attendance')
         ->result();
 
         $attendance = [];
@@ -123,11 +123,13 @@ class AttendanceReportsModel extends CI_Model {
                 continue; // Skip student if no matching data
             }
 
-            $result['students'][] = [
-                'student_id' => $s->student_id,
-                'name' => $s->fullname,
-                'attendance' => $studentData
-            ];
+          $result['students'][] = [
+    'student_id' => $s->student_id,
+    'name' => $s->fullname,
+    'attendance' => $studentData,
+    'profile_picture' => $s->profile_picture ?? null
+];
+
         }
 
         return $result;
@@ -136,7 +138,7 @@ class AttendanceReportsModel extends CI_Model {
     public function get_masjid_name($masjid_id) {
         return $this->db->select('masjid_name')
                         ->where('masjid_id', $masjid_id)
-                        ->get('ams.tbl_masjids')
+                        ->get('tbl_masjids')
                         ->row()
                         ->masjid_name ?? '';
     }
@@ -144,7 +146,7 @@ class AttendanceReportsModel extends CI_Model {
     public function get_course_name($course_id) {
         return $this->db->select('course_name')
                         ->where('course_id', $course_id)
-                        ->get('ams.tbl_courses')
+                        ->get('tbl_courses')
                         ->row()
                         ->course_name ?? '';
     }
