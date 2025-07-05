@@ -82,7 +82,17 @@
                     <?php endif; ?>
                 </div>
             </div>
-<div class="d-flex align-items-center justify-content-between mb-3">
+<div class="d-flex flex-wrap align-items-center justify-content-between mb-3">
+    <div class="d-flex align-items-center mb-2 mb-md-0">
+        <label for="entriesPerPage" class="me-2 mb-0 small text-muted">Show entries per page:</label>
+        <select id="entriesPerPage" class="form-select form-select-sm" style="width: auto;">
+            <option value="5">5</option>
+            <option value="10" selected>10</option>
+            <option value="15">15</option>
+            <option value="20">20</option>
+            <option value="50">50</option>
+        </select>
+    </div>
     <div class="legend mb-0">
         <strong>NOTE :</strong>
         <i class="fa-solid fa-star text-warning"></i> Holiday
@@ -339,6 +349,28 @@ $(document).on('click', '.show-attendance-pie', function(e) {
 
         renderPagination(totalPages);
     }
+         // Student Row Pagination (entries per page)
+    let studentsPerPage = parseInt($('#entriesPerPage').val());
+    let currentStudentPage = 1;
+
+    function paginateStudentRows() {
+        const rows = $('table tbody tr');
+        const totalRows = rows.length;
+        const totalPages = Math.ceil(totalRows / studentsPerPage);
+
+        rows.hide();
+        rows.slice((currentStudentPage - 1) * studentsPerPage, currentStudentPage * studentsPerPage).show();
+
+        // Optional: update pagination UI for student rows if needed
+    }
+
+    $('#entriesPerPage').change(function () {
+        studentsPerPage = parseInt($(this).val());
+        currentStudentPage = 1;
+        paginateStudentRows();
+    });
+
+    paginateStudentRows(); // Initial call
 
     function renderPagination(totalPages) {
         let pagination = '';

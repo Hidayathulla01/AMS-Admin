@@ -130,7 +130,7 @@ class Student_Controller  extends CI_controller{
 	
 	public function UpdateStudentData() {
 		$id = $this->input->post('EditStudentId');
-		
+		//pr($id);
 		$EditnewParentName = $this->input->post('EditParentfullname_new');
 		$parentId = null;
 		$ParentData = [];
@@ -192,7 +192,7 @@ class Student_Controller  extends CI_controller{
 			$StudentData['profile_picture'] = $ImgUpdate['EditProfilePicture'];
 		}
 		
-		pr($StudentData);
+		//pr($StudentData);
 		$updateStatus = $this->Student_Model->UpdateStudent($StudentData, $ParentData, $id, $parentId);
 
 		if ($updateStatus) {
