@@ -134,6 +134,47 @@ class AttendanceReportsModel extends CI_Model {
 
         return $result;
     }
+public function get_student_by_id($student_id) {
+    return $this->db
+        ->select('student_id, fullname, mobile_no, roll_number, email, address, profile_picture') // Include missing fields
+        ->where('student_id', $student_id)
+        ->where('delete_status', '1')
+        ->get('tbl_student')
+        ->row();
+}
+
+
+public function get_attendance_by_student($student_id) {
+    $rows = $this->db
+        ->where('student_id', $student_id)
+        ->where('delete_status', '1')
+        ->order_by('created_date', 'DESC')
+        ->get('tbl_attendance')
+        ->result();
+
+    $data = [];
+
+    foreach ($rows as $row) {
+        $day = date('Y-m-d', strtotime($row->created_date));
+        switch ($row->attendance_status) {
+            case '1': $status = 'present'; break;
+            case '2': $status = 'absent'; break;
+            case '3': $status = 'late'; break;
+            case '4': $status = 'leave'; break;
+            case '5': $status = 'holiday'; break;
+            default:  $status = '-';
+        }
+
+        $data[] = [
+            'date' => $day,
+            'status' => $status,
+            'remark' => $row->remark,
+            'late_time' => $row->late_time
+        ];
+    }
+
+    return $data;
+}
 
     public function get_masjid_name($masjid_id) {
         return $this->db->select('masjid_name')

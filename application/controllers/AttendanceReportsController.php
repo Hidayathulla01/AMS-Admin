@@ -51,6 +51,36 @@ class AttendanceReportsController extends CI_Controller {
 
         $this->load->view('AttendanceReportsResultView', $data);
     }
+public function student_view($student_id) {
+    $data['student'] = $this->AttendanceReportsModel->get_student_by_id($student_id);
+    $attendance_data = $this->AttendanceReportsModel->get_attendance_by_student($student_id);
+
+    if (!$data['student']) {
+        show_404();
+    }
+
+    // Calculate attendance summary
+    $summary = [
+        'present' => 0,
+        'absent' => 0,
+        'late' => 0,
+        'leave' => 0,
+        'holiday' => 0
+    ];
+
+    foreach ($attendance_data as $record) {
+        if (isset($summary[$record['status']])) {
+            $summary[$record['status']]++;
+        }
+    }
+
+    $data['attendance_summary'] = $summary;
+    $data['attendance_details'] = $attendance_data;
+
+    $this->load->view('student_profile', $data);
+}
+
+
     public function export_excel() {
     $masjid_id = $this->input->post('masjid_id');
     $course_id = $this->input->post('course_id');

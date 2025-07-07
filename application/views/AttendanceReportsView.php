@@ -30,7 +30,7 @@
                 <li class="breadcrumb-item"><a href="<?php echo base_url('DashboardIndex'); ?>">Dashboard</a></li>
                 <li class="breadcrumb-item active" aria-current="page">Attendance Reports</li>
             </ol>
-        </nav>
+           </nav>
 
         <div class="form-container bg-white rounded shadow p-4 mb-4">
             <h4 class="fs-5 mb-3">Filter Attendance Reports</h4>

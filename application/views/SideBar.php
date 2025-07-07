@@ -71,7 +71,7 @@ body{
 <header class="navbar navbar-dark sticky-top bg-light flex-md-nowrap p-2">
   <!-- Logo -->
   <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="#">
-    <img src="./assets/Logo/Home.png" alt="Logo" class="logo-img" style="height: 60px; width: auto;">
+    <img src="<?php echo base_url('/assets/Logo/Home.png'); ?>" alt="Logo" class="logo-img" style="height: 60px; width: auto;">
   </a>
 
   <!-- Sidebar Toggle Button (Visible on Mobile) -->

@@ -9,7 +9,6 @@
     <link href="./assets/dist/css/bootstrap5.css" rel="stylesheet">
     <link href="./assets/dist/css/dashboard.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <style>
         .attendance-table th, .attendance-table td {
@@ -35,20 +34,6 @@
         .icon-leave { color: blue; }
         .legend i { margin-right: 5px; }
         .text-danger { color: #198754 !important; }
-        a.show-attendance-pie {
-    cursor: pointer;
-    text-decoration: underline;
-}
-#attendancePieChart {
-    width: 100% !important;
-    max-width: 380px;
-    height: auto !important;
-    margin: 0 auto;
-}
-
-#attendancePieModal .modal-dialog {
-    max-width: 500px;
-}
 
     </style>
 </head>
@@ -146,21 +131,12 @@ foreach ($report['filtered_dates'] as $date) {
     elseif ($status == 'leave') $leave++;
     elseif ($status == 'holiday') $holiday++;
 }
-$attendanceData = [
-    'present' => $present,
-    'absent' => $absent,
-    'late' => $late,
-    'leave' => $leave,
-    'holiday' => $holiday
-];
 ?>
 <td class="name-col">
     <i class="fa-solid fa-user"></i>
-    <a href="#" class="show-attendance-pie"
-       data-name="<?= htmlspecialchars($student['name']) ?>"
-       data-attendance='<?= json_encode($attendanceData) ?>'>
-       <?= htmlspecialchars($student['name']) ?>
-    </a>
+  <a href="<?= base_url('AttendanceReportsController/student_view/' . $student['student_id']) ?>">
+   <?= htmlspecialchars($student['name']) ?>
+</a>
     <br>
     <small class="text-muted">Student</small>
 </td>
@@ -268,56 +244,6 @@ echo "<td><span class='text-danger fw-bold'>$total/$count</span></td>";
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
 $(document).ready(function () {
-    let attendancePieChart; // Chart.js instance
-
-$(document).on('click', '.show-attendance-pie', function(e) {
-    e.preventDefault();
-    const name = $(this).data('name');
-    const attendance = JSON.parse($(this).attr('data-attendance'));
-
-
-    $('#pieStudentName').text(name);
-
-    // Prepare data for Chart.js
-    const data = {
-        labels: ['Present', 'Absent', 'Late', 'Leave', 'Holiday'],
-        datasets: [{
-            data: [
-                attendance.present,
-                attendance.absent,
-                attendance.late,
-                attendance.leave,
-                attendance.holiday
-            ],
-            backgroundColor: [
-                'green',
-                'red',
-                'orange',
-                'blue',
-                'gold'
-            ]
-        }]
-    };
-
-    // Destroy previous chart if exists
-    if (attendancePieChart) attendancePieChart.destroy();
-
-    // Draw new chart
-    const ctx = document.getElementById('attendancePieChart').getContext('2d');
-    attendancePieChart = new Chart(ctx, {
-        type: 'pie',
-        data: data,
-        options: {
-            responsive: true,
-            plugins: {
-                legend: { position: 'bottom' }
-            }
-        }
-    });
-
-    // Show modal
-    $('#attendancePieModal').modal('show');
-});
     $('.attendance-icon').click(function () {
         $('#modalStudentName').text($(this).data('name'));
         $('#modalAttendanceStatus').text($(this).data('status'));
@@ -400,20 +326,6 @@ $(document).on('click', '.show-attendance-pie', function(e) {
     paginateColumns(1);
 });
 </script>
-<!-- Pie Chart Modal -->
-<div class="modal fade" id="attendancePieModal" tabindex="-1" aria-labelledby="attendancePieModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title"><span id="pieStudentName"></span> - Attendance Chart</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-<canvas id="attendancePieChart"></canvas>
-      </div>
-    </div>
-  </div>
-</div>
 
 </body>
 </html>
