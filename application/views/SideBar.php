@@ -217,7 +217,7 @@ body{
             <i class="fas fa-times"></i>
           </button>
         </div>
-        <ul class="nav flex-column">
+        <ul class="nav flex-column mt-4">
           <li class="nav-item">
 			<a class="nav-link <?php echo ($this->uri->segment(1) == 'DashboardIndex') ? 'active' : ''; ?>" href="<?php echo base_url("DashboardIndex"); ?>">
               <i class="fas fa-tachometer-alt"></i>&nbsp;&nbsp;Dashboard

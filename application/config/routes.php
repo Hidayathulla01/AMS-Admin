@@ -1,5 +1,5 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
 /*
 | -------------------------------------------------------------------------
@@ -50,14 +50,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 |		my-controller/my-method	-> my_controller/my_method
 */
 $route['default_controller'] = 'AdminLogin';
- 
+
 // Route for the login page
-$route['login'] = 'AdminLogin/login'; 
-$route['ForgetPwdIndex'] = 'AdminLogin/ForgetPwdIndex'; 
-$route['SendResetLink'] = 'AdminLogin/SendResetLink'; 
-$route['ResetPassword'] = 'AdminLogin/ResetPassword'; 
-$route['update_password'] = 'AdminLogin/update_password'; 
-$route['logout'] = 'AdminLogin/logout'; 
+$route['login'] = 'AdminLogin/login';
+$route['ForgetPwdIndex'] = 'AdminLogin/ForgetPwdIndex';
+$route['SendResetLink'] = 'AdminLogin/SendResetLink';
+$route['ResetPassword'] = 'AdminLogin/ResetPassword';
+$route['update_password'] = 'AdminLogin/update_password';
+$route['logout'] = 'AdminLogin/logout';
 
 
 //route for Dashboard page
@@ -65,7 +65,7 @@ $route['DashboardIndex'] = 'Dashboard_Controller/DashboardIndex';
 $route['EditProfileIndex'] = 'Dashboard_Controller/EditProfileIndex';
 $route['UpdateEditProfileData'] = 'Dashboard_Controller/UpdateEditProfileData';
 
-	/****Routes for Masjid Management:****/
+/****Routes for Masjid Management:****/
 $route['MasjidIndex'] = 'Masjid_Controller/MasjidIndex';
 $route['AddMasjid'] = 'Masjid_Controller/AddMasjid';
 $route['DeleteMasjid'] = 'Masjid_Controller/DeleteMasjid';
@@ -74,7 +74,7 @@ $route['UpdateMasjidData'] = 'Masjid_Controller/UpdateMasjidData';
 $route['upd'] = 'Masjid_Controller/upd';
 $route['MasjidDetails'] = 'Masjid_Controller/MasjidDetails';
 
-	/****Routes for Admin Management:****/
+/****Routes for Admin Management:****/
 $route['AdminIndex'] = 'Admin_Controller/AdminIndex';
 $route['AddAdmin'] = 'Admin_Controller/AddAdmin';
 $route['DeleteAdmin'] = 'Admin_Controller/DeleteAdmin';
@@ -119,8 +119,10 @@ $route['getAssignClassData'] = 'AssignClass_Controller/getAssignClassData';
 
 $route['ClearAttendanceIndex'] = 'ClearAttendance_Controller/ClearAttendanceIndex';
 $route['DeleteAttendanceData'] = 'ClearAttendance_Controller/DeleteAttendanceData';
-$route['AttendanceReports'] = 'AttendanceReportsController/AttendanceReports'; 
+$route['AttendanceReports'] = 'AttendanceReportsController/AttendanceReports';
 $route['AttendanceResult'] = 'AttendanceReportsController/AttendanceResult';
+$route['student_view'] = 'AttendanceReportsController/student_view';
+$route['student_view/(:any)'] = 'AttendanceReportsController/student_view/$1';
 
 
 
